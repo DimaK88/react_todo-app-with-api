@@ -1,48 +1,46 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
+
 export type Props = {
-  todos: Todo[];
-  loadingTodoId?: number[];
-  handleToggleTodo: (id: number) => void;
-  onDeleteTodo?: (currentTodoId: number) => Promise<void>;
-  editingTodoId: number | null;
-  editedTitle: string;
-  handleEditTodo: (todo: Todo) => void;
-  handleEditInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleEditSave: (todo: Todo) => void;
-  handleEditCancel: () => void;
+  onDelete: (id: number) => void;
+  onUpdate: (todo: Todo) => void;
+  loadingTodoId: number[];
+  tempTodo: Todo | null;
+  visibleTodos: Todo[];
 };
 export const TodoList: React.FC<Props> = ({
-  todos,
+  onDelete,
+  onUpdate,
   loadingTodoId,
-  handleToggleTodo = () => {},
-  onDeleteTodo = () => {},
-  editingTodoId,
-  editedTitle,
-  handleEditTodo,
-  handleEditInput,
-  handleEditSave,
-  handleEditCancel,
+  tempTodo,
+  visibleTodos,
 }) => {
+  const handleUpdate = (todo: Todo, newTitle: string) => {
+    onUpdate({ ...todo, title: newTitle });
+  };
+
+  const handleToggle = (todo: Todo) => {
+    onUpdate({ ...todo, completed: !todo.completed });
+  };
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       <>
-        {todos.map(todo => (
+        {visibleTodos.map(todo => (
           <TodoItem
             key={todo.id}
             todo={todo}
-            onloadingTodoIds={loadingTodoId}
-            handleToggleTodo={handleToggleTodo}
-            handleTodoDelete={onDeleteTodo}
-            isEditing={editingTodoId === todo.id}
-            editedTitle={editedTitle}
-            handleEditTodo={() => handleEditTodo(todo)}
-            handleEditInput={handleEditInput}
-            handleEditSave={handleEditSave}
-            handleEditCancel={handleEditCancel}
+            onDelete={() => onDelete(todo.id)}
+            onToggle={() => handleToggle(todo)}
+            onUpdate={newTitle => handleUpdate(todo, newTitle)}
+            loading={loadingTodoId.includes(todo.id)}
           />
         ))}
+
+        {tempTodo && (
+          <TodoItem todo={tempTodo} loading={loadingTodoId.includes(0)} />
+        )}
       </>
     </section>
   );

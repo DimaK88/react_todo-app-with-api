@@ -5,8 +5,8 @@ import { Todo } from '../types/Todo';
 export type Props = {
   todo: Todo;
   loading: boolean;
-  onDelete?: () => void;
   onToggle?: () => void;
+  onDelete?: () => void;
   onUpdate?: (newTitle: string) => void;
 };
 
@@ -27,14 +27,20 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const saveChanges = () => {
+    if (!onUpdate || !onDelete) {
+      return;
+    }
+
     const trimValue = value.trim();
 
-    if (trimValue) {
-      onUpdate?.(trimValue);
-      setIsEditing(false);
-    } else {
-      onDelete?.();
-      setIsEditing(true);
+    if (!trimValue) {
+      onDelete();
+
+      return;
+    }
+
+    if (trimValue !== title) {
+      onUpdate(trimValue);
     }
 
     setIsEditing(false);
@@ -53,8 +59,6 @@ export const TodoItem: React.FC<Props> = ({
     if (event.key === 'Escape') {
       setIsEditing(false);
       setValue(title);
-    } else if (event.key === 'Enter') {
-      saveChanges();
     }
   };
 

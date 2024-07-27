@@ -27,30 +27,26 @@ export const Header: React.FC<Props> = ({
   const allToggle = !loading && todos.length > 0;
 
   const toggleTodos = () => {
-    setTodos(
-      todos.map(todo => ({
+    const toggleStatus = !todoComleted;
+    const previousTodos = todos;
+
+    setTodos(currentTodos =>
+      currentTodos.map(todo => ({
         ...todo,
-        completed: !todoComleted,
+        completed: toggleStatus,
       })),
     );
-    todos
-      .filter(todo => todo.completed !== todoComleted)
-      .forEach(todo => {
-        updateTodo({
-          ...todo,
-          completed: todoComleted,
-        }).catch(() => {
-          setTodos(current =>
-            current.map(a => {
-              if (a.id === todo.id) {
-                return { ...a, completed: !todoComleted };
-              }
 
-              return a;
-            }),
-          );
-        });
+    const filteredTodos = todos.filter(todo => todo.completed !== toggleStatus);
+
+    filteredTodos.forEach(todo => {
+      updateTodo({
+        ...todo,
+        completed: toggleStatus,
+      }).catch(() => {
+        setTodos(previousTodos);
       });
+    });
   };
 
   return (

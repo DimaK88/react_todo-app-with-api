@@ -24,6 +24,7 @@ export const Footer: React.FC<Props> = ({
       <span className="todo-count" data-cy="TodosCounter">
         {avtiveTodos} items left
       </span>
+
       <nav className="filter" data-cy="Filter">
         {Object.values(Status).map(value => (
           <a
@@ -42,6 +43,7 @@ export const Footer: React.FC<Props> = ({
           </a>
         ))}
       </nav>
+
       <button
         type="button"
         className="todoapp__clear-completed"

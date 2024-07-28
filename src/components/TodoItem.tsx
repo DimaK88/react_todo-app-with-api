@@ -19,7 +19,7 @@ export const TodoItem: React.FC<Props> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { title, completed, id } = todo;
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(title);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

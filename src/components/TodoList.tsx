@@ -16,7 +16,6 @@ export const TodoList: React.FC<Props> = ({
   tempTodo,
   visibleTodos,
 }) => {
-
   const handleUpdate = (todo: Todo, newTitle: string) => {
     onUpdate({ ...todo, title: newTitle });
   };
@@ -29,6 +28,7 @@ export const TodoList: React.FC<Props> = ({
     <section className="todoapp__main" data-cy="TodoList">
       {visibleTodos.map(todo => {
         const isLoading = loadingTodoId.includes(todo.id);
+
         return (
           <TodoItem
             key={todo.id}
@@ -42,10 +42,7 @@ export const TodoList: React.FC<Props> = ({
       })}
 
       {tempTodo && (
-        <TodoItem
-          todo={tempTodo}
-          loading={loadingTodoId.includes(0)}
-        />
+        <TodoItem todo={tempTodo} loading={loadingTodoId.includes(0)} />
       )}
     </section>
   );
